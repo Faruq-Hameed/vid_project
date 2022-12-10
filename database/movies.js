@@ -1,0 +1,67 @@
+const movies = [
+    {
+        title: 'title1',
+        id: 1,
+        genre: 'Action',
+        producer: 'producerA',
+        actors: ['actorA', 'actorB', 'actorC'],
+        releasedYear: '20/10/2020',
+        availableQuantity: 10,
+    },
+    {
+        title: 'title2',
+        id: 2,
+        genre: 'Adventure',
+        producer: 'producerB',
+        actors: ['actorA', 'actorB', 'actorC'],
+        releasedYear: '20/10/2020',
+        availableQuantity: 10,
+    },
+    {
+        title: 'title1',
+        id: 3,
+        genre: 'Comedy',
+        producer: 'producerC',
+        actors: ['actorA', 'actorB', 'actorC'],
+        releasedYear: '20/10/2020',
+        availableQuantity: 10,
+    },
+    {
+        title: 'title1',
+        id: 4,
+        genre: 'fantasy',
+        producer: 'producerD',
+        actors: ['actorA', 'actorB', 'actorC'],
+        releasedYear: '20/10/2020',
+        availableQuantity: 10,
+    },
+    {
+        title: 'title1',
+        id: 5,
+        genre: 'historical',
+        producer: 'producerE',
+        actors: ['actorA', 'actorB', 'actorC'],
+        releasedYear: '20/10/2020',
+        availableQuantity: 10,
+    },
+    {
+        title: 'title1',
+        id: 6,
+        genre: 'horror',
+        producer: 'producerF',
+        actors: ['actorA', 'actorB', 'actorC'],
+        releasedYear: '20/10/2020',
+        availableQuantity: 10,
+    },
+    {
+        title: 'title1',
+        id: 7,
+        genre: 'drama',
+        producer: 'producerG',
+        actors: ['actorA', 'actorB', 'actorC'],
+        releasedYear: '20/10/2020',
+        availableQuantity: 10,
+    }
+]
+
+module.exports = movies;
