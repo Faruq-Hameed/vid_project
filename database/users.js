@@ -1,7 +1,7 @@
 const users = [
     {
         id: 1,
-        name: 'John',
+        name: 'admin',
         moviesRented: [
             { moviesId: 2, dateRented: new Date, returned: false },
             { moviesId: 7, dateRented: new Date, returned: true },
