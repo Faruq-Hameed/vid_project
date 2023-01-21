@@ -1,85 +1,90 @@
 const express = require('express')
 const Joi = require('joi')
 const { genres, movies, users } = require('../../database')
-const {getById, getIndexById} = require('../../functions')
-const genresRouter = express.Router()
+const {getById, getIndexById,getObjectByAny, validationError, validatedGenre, optionalValidatedGenre } = require('../../functions/')
 
+const router = express.Router()
 
-
-
-genresRouter.get('/', (req, res) => {
+router.get('/', (req, res) => {
+    if(genres.length === 0) { 
+        return res.status(404).send('no genres available');
+    }
     res.status(200).send(genres)
 })
 
-genresRouter.get('/:genreId', (req, res) => {
+router.get('/:genreId', (req, res) => {
     const genre = getById(genres, req.params.genreId)
     if (!genre) return res.status(404).send('genre not found')
     res.status(200).json({ genre })
 })
 
-genresRouter.post('/', (req, res) => {
-    // if (req.body.adminId !== 1) return res.status(401).send('unauthorized user') //only admin can add more genres
-    const result = validateSchema(req.body)
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
-        return;
-    }
+router.post('/', (req, res) => {
+    const validation = validatedGenre(req.body)
+    if (validationError(validation, res)) { return } //returning validation errors if any
+     
+    const doesGenreExist = getObjectByAny(genres, validation.value.name,)
+    if (doesGenreExist) { return res.status(400).send(`genres with name '${validation.value.name}' already exists`) }
+    console.log(doesGenreExist)
     //adding the new genre to the genres list in database
-    delete req.body.adminId
-    const newGenre = req.body
+    const newGenre = validation.value
     newGenre.id = genres.length + 1
-    newGenre.availableMovies = 0 // this will update if new movie with the genre is available/added later
+    newGenre.availableMovies = 0 
     genres.push(newGenre)
     res.status(200).json({ newGenre })
 })
 
 
-genresRouter.put('/:genreId/:adminId', (req, res) => {
-    if (req.params.adminId !== "1") return res.status(401).send('unauthorized user')
+router.put('/:genreId/', (req, res) => {
     const genre = getById(genres, req.params.genreId) // finding the genre with the id
-    const genreIndex = getIndexById(genres, req.params.genreId) //finding the index of the genre with the id
     if (!genre) return res.status(404).send('genre not found')
 
-    const result = validateSchema(req.body)
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
-        return;
+    const genreIndex = getIndexById(genres, req.params.genreId) //finding the index of the genre with the id
+    
+    const validation = validatedGenre(req.body)
+    if (validationError(validation, res)) { return };
+
+    const doesGenreExist = getObjectByAny(genres, validation.value.name,)
+    if (doesGenreExist) {
+        res.status(403).send(`genres with name '${validation.value.name}' already exists`)
+        return
     }
 
-    const updatedGenre = req.body
+    const updatedGenre = validation.value
     updatedGenre.id = genre.id
     updatedGenre.availableMovies = genre.availableMovies
+
     genres.slice(genreIndex, 1, updatedGenre)
     res.status(200).json({ updatedGenre })
 
 })
 
 
-genresRouter.patch('/:genreId/:adminId', (req, res) => {
-    if (req.params.adminId !== "1") return res.status(400).send('unauthorized user')
+router.patch('/:genreId/', (req, res) => {
     const genre = getById(genres, req.params.genreId)
     if (!genre) return res.status(404).send('genre not found')
-    const schema = Joi.object({
-        name: Joi.string().min(3).max(16),
-        description: Joi.string().min(3).max(200),
-    })
-    const result = schema.validate(req.body)
+        
+    const validation = optionalValidatedGenre(req.body)
+    if (validationError(validation, res)) { return }
+
+    const {name, description} = optionalValidatedGenre.value
     
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
-        return;
+
+    if (name) {//checking if the new name provided already exists
+        for (element of genres) {
+            if (element !== genre && element.name === optionalValidatedGenre.name) {//only check if the element (genre object) is not the current genre
+                return res.status(409).send('username already exists')
+            }
+            genre.name = name
+        }
     }
 
-    for (key in req.body) {
-        if(key=== 'id') continue //to ignore id if present in body
-        genre[key] = req.body[key]
-    }
+    genre.description = description
+
     res.status(200).json({ genre })
 })
 
 
-genresRouter.delete('/:genreId/:adminId', (req, res) => {
-    if (req.params.adminId !== "1") return res.status(400).send('unauthorized user') //only admin can delete 
+router.delete('/:genreId', (req, res) => {
 
     const genreIndex = getIndexById(genres, req.params.genreId) //finding the index of the genre with the id
     if (!genreIndex) return res.status(404).send('genre not found')
@@ -88,13 +93,7 @@ genresRouter.delete('/:genreId/:adminId', (req, res) => {
     res.status(200).end('delete successful')
 })
 
-function validateSchema(req) {
-    const schema = Joi.object({
-        name: Joi.string().min(3).max(16).required(),
-        description: Joi.string().min(3).max(200).required(),
-    })
-    return schema.validate(req)
-}
 
-module.exports = genresRouter
+
+module.exports = router
 

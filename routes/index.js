@@ -1,6 +1,4 @@
-const movies = require('./movies')
-const genresRouter = require('./genres')
-
-module.exports = {movies,genresRouter}
-
-// module.exports = {genres, movies, users, moviesRouter}
+module.exports = {
+    movies: require('./movies'),
+    genres: require('./genres')
+}

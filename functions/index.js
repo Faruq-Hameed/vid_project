@@ -1,11 +1,5 @@
-function getById(array, id) {
-    const item = array.find(obj => obj.id === parseInt(id))
-    return item
-}
+const {getById, getIndexById, getObjectByAny} = require('./methods')
+const {validatedGenre,validationError, optionalValidatedGenre} = require('./schema')
 
-function getIndexById(array, id) {
-    const index = array.findIndex(obj => obj.id === parseInt(id))
-    return index
-}
+module.exports = {getById, getIndexById, validatedGenre,validationError,optionalValidatedGenre, getObjectByAny}
 
-module.exports = {getById, getIndexById}
