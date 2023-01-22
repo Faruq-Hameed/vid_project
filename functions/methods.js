@@ -8,8 +8,8 @@ function getIndexById(array, id) {
     return index
 }
 
-function getObjectByAny(array, key){
-    const obj = array.find(obj => obj[key] === key)
+function getObjectByAny(array, key, value){
+    const obj = array.find(obj => obj[key].toUpperCase() === value.toUpperCase())
     return obj
 }
 

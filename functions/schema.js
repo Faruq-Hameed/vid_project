@@ -16,11 +16,5 @@ function optionalValidatedGenre(data) {
     return schema.validate(data)
 }
 
-function validationError(validatedSchema, res){
-    if (validatedSchema.error) {
-        res.status(400).send(validatedSchema.error.details[0].message);
-        return true;
-    }
-}
 
-module.exports = {validatedGenre,validationError, optionalValidatedGenre}
+module.exports = {validatedGenre, optionalValidatedGenre}
