@@ -1,3 +1,5 @@
+const {getObjectByAny} = require('../functions')
+
 
 function validationError(validatedSchema, res){ //handle Joi validation errors if present
     if (validatedSchema.error) {
@@ -14,15 +16,12 @@ function genreError(genre, res){ //handling unknown genre error if present
     }
 }
 
-function doesItemExist(arr1,arr2, key1,key2, res) {
-    if (key2) {//checking if the new name provided already exists
-        for (element of arr1) {
-            if (element[key2] !== arr2[key2] && element[key2].toLowerCase() === key1.toLowerCase()) {//only check if the element (genre object) is not the current genre  
-                res.status(409).send(`${key2} ${element[key2]} already exists`)
-                return true
-            }
-        }
+
+function doesItemExist(genres, value, res) {
+    const doesGenreExist = getObjectByAny(genres, 'name', value) //if genre with the new name already exists
+    if (doesGenreExist) {
+        res.status(400).send(`genres with name '${value}' already exists`)
+        return true
     }
 }
-
 module.exports = {validationError, genreError,doesItemExist}

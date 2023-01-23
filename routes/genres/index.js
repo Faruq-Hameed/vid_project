@@ -2,9 +2,9 @@ const express = require('express')
 const Joi = require('joi')
 
 const { genres,} = require('../../database')
-const { getById, getIndexById, getObjectByAny } = require('../../functions/')
-const { validatedGenre, optionalValidatedGenre } = require('../../functions/schema')
-const { validationError, genreError, doesItemExist } = require('../../functions/error')
+const { getById, getIndexById } = require('../../functions/')
+const { validatedGenre, optionalValidatedGenre,validationError,genreError,doesItemExist } = require('../../errors')
+
 
 const router = express.Router()
 
@@ -28,12 +28,8 @@ router.get('/:genreId', (req, res) => {
 router.post('/', (req, res) => {
     const validation = validatedGenre(req.body)
     if (validationError(validation, res)) { return } //returning validation errors if any
-
-    const doesGenreExist = getObjectByAny(genres,'name',validation.value.name)
-    if (doesGenreExist) {
-        res.status(400).send(`genres with name '${validation.value.name}' already exists`)
-        return
-    }
+    if (doesItemExist(genres, validation.value.name, res)) { return }// if new genre name already exists
+    
     //adding the new genre to the genres list in database
     const newGenre = validation.value
     newGenre.id = genres.length + 1
@@ -51,9 +47,10 @@ router.put('/:genreId/', (req, res) => {
     const validation = validatedGenre(req.body)
     if (validationError(validation, res)) { return }; 
 
-    const {name} = validation.value
-    if (doesItemExist(genres, genre,name, 'name', res)) {return} //checking if we already have a genre with the new name
-
+    //checking if the new name is different from the previous and is not the same for another genre
+    if ((genre.name.toUpperCase() !== validation.value.name.toUpperCase())
+        && doesItemExist(genres, validation.value.name, res)) { return }
+    
     const updatedGenre = validation.value
     updatedGenre.id = genre.id
 
@@ -70,10 +67,13 @@ router.patch('/:genreId/', (req, res) => {
     if (validationError(validation, res)) { return }
 
     const {name, description} = validation.value
-    if (doesItemExist(genres, genre,name, 'name', res)) {return} //checking if we already have a genre with the new name
 
-    genre.name = name
-    genre.description = description
+    //if name is present & is different from the previous & is the same for another genre
+    if ((name && genre.name.toUpperCase() !== validation.value.name.toUpperCase())
+        && doesItemExist(genres, validation.value.name, res)) { return }
+
+    if(name) genre.name = name
+    if(description) genre.description = description
 
     res.status(200).json({ genre })
 })
