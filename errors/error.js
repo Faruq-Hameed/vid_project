@@ -20,7 +20,7 @@ function genreError(genre, res){ //handling unknown genre error if present
 function doesItemExist(genres, value, res) {
     const doesGenreExist = getObjectByAny(genres, 'name', value) //if genre with the new name already exists
     if (doesGenreExist) {
-        res.status(400).send(`genres with name '${value}' already exists`)
+        res.status(409).send(`genres with name '${value}' already exists`)
         return true
     }
 }
