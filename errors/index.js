@@ -1,4 +1,7 @@
-const { validatedGenre, optionalValidatedGenre } = require('./schema')
-const { validationError, genreError, doesItemExist } = require('./error')
+const { validatedGenre, optionalValidatedGenre, paginationSchema } = require('./schema')
+const { validationError, genreError, doesItemExist , paginationError} = require('./error')
 
-module.exports = {validatedGenre, optionalValidatedGenre, validationError, genreError, doesItemExist}
+module.exports = {
+    validatedGenre, optionalValidatedGenre, paginationSchema,
+    validationError, genreError, doesItemExist,paginationError
+}
