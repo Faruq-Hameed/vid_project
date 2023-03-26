@@ -1,7 +1,7 @@
 const express = require('express')
 const Joi = require('joi')
-const { getById, getIndexById } = require('../../functions')
-const { genres, movies, users } = require('../../database')
+const { getById, getIndexById } = require('../../utils')
+const { genres, movies, users } = require('../../database/oldDb')
 
 const moviesRouter = express.Router()
 

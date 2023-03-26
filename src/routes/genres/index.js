@@ -1,22 +1,24 @@
 const express = require('express')
+const {Genre, Movie} = require('../../database/models')
 const Joi = require('joi')
+// const getGenre = require('...
 
-const { genres,} = require('../../database')
-const { getById, getIndexById } = require('../../functions/')
-const { validatedGenre, optionalValidatedGenre, paginationSchema,
-    validationError, genreError, doesItemExist, paginationError } = require('../../errors')
-const paginate = require('../../paginate')
+// const { genres,} = require('../../database')
+// const { getById, getIndexById } = require('../../functions')
+// const { validatedGenre, optionalValidatedGenre, paginationSchema,
+//     validationError, genreError, doesItemExist, paginationError } = require('../../../errors')
+// const paginate = require('../../../paginate')
 
 
 const router = express.Router()
 
+//router.route(path)
+// .get(getGenre)
+// .post(postGenre)
 
-router.get('/', (req, res) => {
-    if (paginationError(genres, req, res)) return; //for errors with pagination and validation
+// router.get(path,)
 
-    const paginatedResult = paginate(genres, req)
-    res.status(200).send(paginatedResult)
-})
+router.get('/')
 
 
 router.get('/:genreId', (req, res) => {
