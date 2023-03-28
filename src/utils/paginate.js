@@ -1,5 +1,9 @@
 //joi schema for pagination
 const Joi = require('joi')
+const { StatusCodes } = require('http-status-codes');
+const    {BadRequestError} = require('../errors')
+
+
 function schema(input) {
     const result = Joi.object({
         page: Joi.number().integer().min(1).default(1),
@@ -12,13 +16,13 @@ function paginationError(array,req){
     const validation = schema(req.query)
 
     if (validation.error) {
-        let response = { status: 422, message: validation.error.details[0].message }//if the validation is not successful
+        let response = { status: StatusCodes.UNPROCESSABLE_ENTITY, message: validation.error.details[0].message }//if the validation is not successful
         return response;
     }
 
     //if the database provide is undefined or empty
     if (!array || array.length === 0) {
-        let response = { status: 204, message: 'no item available'}
+        let response = { status: StatusCodes.NO_CONTENT, message: 'no item available'}
         return response;
     }
 
@@ -27,7 +31,7 @@ function paginationError(array,req){
     // incase the client is requesting for an exceeded limit or page number
 
     if(page >Math.ceil(array.length / limit)){
-        let response = { status: 404, message: `you have exceeded the maximum page of ${Math.ceil(array.length / limit)}`}
+        let response = { status: StatusCodes.BAD_REQUEST, message: `you have exceeded the maximum page of ${Math.ceil(array.length / limit)}`}
         return response;
     }
 

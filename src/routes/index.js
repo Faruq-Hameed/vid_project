@@ -1,4 +1,5 @@
 module.exports = {
-    movies: require('./movies'),
-    genres: require('./genres')
+    moviesRouter: require('./moviesRoutes'),
+    genreRouter: require('./genresRoutes'),
+    customerRouter: require('./customersRoutes')
 }

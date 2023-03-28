@@ -1,5 +1,4 @@
-const {getById, getIndexById, getObjectByAny} = require('./methods')
+const {paginate, paginationError} = require('./paginate')
 
-
-module.exports = {getById, getIndexById, getObjectByAny}
+module.exports = {paginate, paginationError}
 

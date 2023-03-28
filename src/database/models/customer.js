@@ -8,7 +8,7 @@ const customerSchema = new Schema({
     },
     isGold: {
         type: Boolean,
-        default: true,
+        default: false,
         required: [true, 'is customer gold?']
 
     },
