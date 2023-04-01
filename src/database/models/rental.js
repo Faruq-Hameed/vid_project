@@ -14,7 +14,7 @@ const rentalSchema = new Schema({
     },
     dateOut: {
         Type: Date,
-        default: Date.now()
+        // default: Date.now()
     },
     dateReturned: {
         Type: Date
