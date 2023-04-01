@@ -2,18 +2,30 @@ const {Customer} = require('../database/models')
 const { StatusCodes } = require('http-status-codes');
 const {customerJoiSchema} = require('../utils/joiSchema')
 const {paginate,paginationError} = require('../utils')
-const    {BadRequestError} = require('../errors')
+const {BadRequestError} = require('../errors')
+const {createUserAuth,userLoginAuth} = require('../middlewares/auth')
  
 
-// get a customer by Id
-const getCustomerById = async( req, res, next ) => {
-    try{
-        const Customer = await Customer.findById( req.params.id)
-        res.status(StatusCodes.OK).json({data: Customer})  
+
+/*********UNPROTECTED ROUTES ********/
+
+// create a new Customer
+const createCustomer = async (req, res) => {
+    const validation = customerJoiSchema(req.body)
+    const {error, value} = await validation
+    if (error) {
+        res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(validation.error.details[0].message);
+        return;
     }
-    catch(err){
-        throw new BadRequestError(err.message)
+    try {
+        const user = await Customer.create({ ...value })
+        // createUserAuth({ name: user.name, userId: user._id }, res) //generate user auth token and sent to cookie
+        res.status(StatusCodes.OK).json({ message: 'customer created successfully', data: user })
     }
+    catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message })
+    }
+
 }
 
 //get all available Customers
@@ -33,22 +45,19 @@ const getAllCustomers = async( req, res, next ) => {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: err.message})
     }
 }
-// create a new Customer
-const createCustomer = async (req, res) => {
-    const validation = customerJoiSchema(req.body)
-    const {error, value} = await validation
-    if (error) {
-        res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(validation.error.details[0].message);
-        return;
-    }
+
+
+/*********PROTECTED ROUTES ********/
+
+// get a customer by Id
+const getCustomerById = async( req, res, next ) => {
     try{
-        const Customer = await Customer.create({...value})
-        res.status(StatusCodes.OK).json({message: 'customer created successfully',data: Customer})
+        const user = await Customer.findById( req.params.id)
+        res.status(StatusCodes.OK).json({data: user})  
     }
     catch(err){
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: err.message})
+        throw new BadRequestError(err.message)
     }
-
 }
 
 const deleteCustomer = async( req, res, next ) => {
@@ -65,8 +74,8 @@ const deleteCustomer = async( req, res, next ) => {
 
 const updateCustomer = async( req, res, next ) => {
     try{
-        const customer = await Genre.findByIdAndUpdate({name: req.body.name})
-        res.status(StatusCodes.OK).json({message: 'customer updated successfully', data:genre})
+        const user = await Customer.findByIdAndUpdate(req.params.id, req.body,{ returnDocument :'after'})
+        res.status(StatusCodes.OK).json({message: 'customer updated successfully', data: user})
         
     }
     catch(err){

@@ -13,10 +13,8 @@ const customerSchema = new Schema({
 
     },
     phone: {
-        type: {
-            type: Number,
-            required: [true, 'customer phone number required']
-        }
+        type: Number,
+        required: [true, 'customer phone number required']
     },
 },
     { timestamps: true }

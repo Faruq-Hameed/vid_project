@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan');
 require('dotenv').config({path: './.env'})
+const cookieParser = require("cookie-parser");
 const {genreRouter, moviesRouter, customerRouter, rentalRouter} = require('./src/routes')
 const startServer = require('./src/database/connection')
 const app = express();
@@ -11,6 +12,8 @@ startServer()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(cookieParser());
+
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms - :remote-user :date"))
 
 app.use('/api/genres', genreRouter)

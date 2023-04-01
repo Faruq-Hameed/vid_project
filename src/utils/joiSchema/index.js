@@ -15,4 +15,13 @@ function movieJoiSchema(data) {
     return result.validate(data)// returning a validated value
 }
  
-module.exports = {genreJoiSchema,movieJoiSchema}
+
+function customerJoiSchema(data){
+    const result = Joi.object({
+        name: Joi.string().lowercase().min(2).required(),
+        phone: Joi.number().required()
+    })
+    return result.validate(data)// returning a validated value
+
+}
+module.exports = {genreJoiSchema,movieJoiSchema,customerJoiSchema}
