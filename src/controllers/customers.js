@@ -5,7 +5,7 @@ const {paginate,paginationError} = require('../utils')
 const    {BadRequestError} = require('../errors')
  
 
-// get a genre by Id
+// get a customer by Id
 const getCustomerById = async( req, res, next ) => {
     try{
         const Customer = await Customer.findById( req.params.id)

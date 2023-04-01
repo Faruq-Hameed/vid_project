@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose')
 
 const app = express()
-const URI = process.env.COMPASS_URI
+const URI = process.env.URI
 const startServer = async() =>{
     try{
         await mongoose.connect(URI)

@@ -1,7 +1,7 @@
 const express = require('express')
 const morgan = require('morgan');
 require('dotenv').config({path: './.env'})
-const {genreRouter, moviesRouter, customerRouter} = require('./src/routes')
+const {genreRouter, moviesRouter, customerRouter, rentalRouter} = require('./src/routes')
 const startServer = require('./src/database/connection')
 const app = express();
 
@@ -16,12 +16,10 @@ app.use(morgan(":method :url :status :res[content-length] - :response-time ms - 
 app.use('/api/genres', genreRouter)
 app.use('/api/movies', moviesRouter)
 app.use('/api/customer', customerRouter)
+app.use('/api/rental', rentalRouter)
 
 
-// app.use('/api/movies', movies)
-
-
-
+// handling all unknown url requests
 app.use('*', (req, res) => {
     res.status(404).send(`You typed an invalid url`)
 })
