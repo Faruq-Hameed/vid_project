@@ -67,7 +67,7 @@ const deleteGenre = async( req, res, next ) => {
 
 const updateGenre = async( req, res, next ) => {
     try{
-        const genre = await Genre.findByIdAndUpdate({name: req.body.name})
+        const genre = await Genre.findByIdAndUpdate({name: req.body.name}, { returnDocument :'after'})
         res.status(StatusCodes.OK).json({message: 'Genre updated successfully', data:genre})
         throw new BadRequestError(err.message)
         

@@ -2,7 +2,7 @@ const express = require('express')
 const { Customer} = require('../database/models')
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
-const {createUserAuth,userLoginAuth,verifyToken} = require('../middlewares/auth')
+const {verifyToken} = require('../middlewares/auth')
 const {getCustomerById, getAllCustomers, createCustomer,deleteCustomer, updateCustomer} =require('../controllers');
 
 const router = express.Router()

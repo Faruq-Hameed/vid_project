@@ -24,4 +24,14 @@ function customerJoiSchema(data){
     return result.validate(data)// returning a validated value
 
 }
-module.exports = {genreJoiSchema,movieJoiSchema,customerJoiSchema}
+
+function RentalJoiSchema(data){
+    const result = Joi.object({
+        rentalFee: Joi.number().required().min(0)
+    })
+    return result.validate(data)// returning a validated value
+
+}
+
+
+module.exports = {genreJoiSchema,movieJoiSchema,customerJoiSchema,RentalJoiSchema}

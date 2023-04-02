@@ -1,28 +1,13 @@
-const {Genre, Movie, Rental, Customer} = require('../database/models')
+const {Movie, Rental} = require('../database/models')
 const { StatusCodes } = require('http-status-codes');
-const {movieJoiSchema} = require('../utils/joiSchema')
+const {RentalJoiSchema} = require('../utils/joiSchema')
 const {paginate,paginationError} = require('../utils')
-const    {BadRequestError} = require('../errors')
 
-// get a Movie by Id
-const getRentalById = async( req, res, next ) => {
-    try{
-        const Rental = await Rental.findById( req.params.id)
-        .populate('genre')
-        .exec()
-        res.status(StatusCodes.OK).json({data: Rental})  
-    }
-    catch(err){
-        throw new BadRequestError(err.message)
-        // res.status(BadRequestError).json({message: err.message})
-    }
-}
 
 //get all available Rentals
-const getAllRentals = async( req, res, next ) => {
-    
+const getAllRentals = async( req, res, next ) => {  
     try{
-        const allRentals = await Rental.find().sort('title')
+        const allRentals = await Rental.find().sort('dateOut')
       //paginated results will be returned to the user
       const error = paginationError(allRentals, req)
       if (error) {
@@ -44,47 +29,34 @@ const createRental = async (req, res) => {
         res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(validation.error.details[0].message);
         return;
     }
-    //checking if the genre id provided is valid
-    const genre = await Genre.findById(req.params.genreId)
-    if (!genre) {
-        res.status(StatusCodes.NOT_FOUND).json({ message: 'genre not found' })
-        return
-    }
-
+    // checking if the movie is available
     try{
-        const newRental = new Rental(value)
-        newRental.genre = req.params.genreId
-        await newRental.save()
-        res.status(StatusCodes.CREATED).json({message: 'Rental created successfully',data: newRental})
+        const isMovieAvailable = await Movie.findById(req.params.movieId, 'numberInStock')
+        if(!isMovieAvailable || isMovieAvailable.numberInStock === 0) {
+            return res
+                .status(StatusCodes.OK)
+                .json({ message: 'Movie not available at this time' })
+        }
+
+        //create the new rental
+       const rental = await Rental.create({
+            customer: req.payload.userId,
+            movie: req.params.movieId,
+           rentalFee: value.rentalFee
+       })
+
+        //update and save the movie stock number
+        isMovieAvailable.numberInStock -= 1
+        await isMovieAvailable.save()
+
+        res.status(StatusCodes.CREATED).json({ message: 'new movie rental request successfully created', data: rental })
+
     }
-    catch(err){
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: err.message})
+    catch (err) {
+        res.status(StatusCodes.BAD_REQUEST).json({ message: err.message })
     }
 }
 
 
-const deleteRental = async( req, res, next ) => {
-    try{
-       await Rental.findByIdAndDelete( req.params.id)
-        res.status(StatusCodes.OK).json({message: 'Rental deleted successfully'})
-        
-    }
-    catch(err){
-        res.status(BadRequestError).json({message: err.message})
-    }
-}
-
-const updateRental = async( req, res, next ) => {
-    try{
-        const Rental = await Rental.findByIdAndUpdate(req.params.id,req.body)
-        res.status(StatusCodes.OK).json({message: 'Rental updated successfully', data:Rental})        
-    }
-    catch(err){
-
-        res.status(StatusCodes.BAD_REQUEST).json({message: err.message})
-    }
-}
-
-
-module.exports = {getRentalById, getAllRentals, createRental,deleteRental, updateRental}
+module.exports = { getAllRentals, createRental }
 

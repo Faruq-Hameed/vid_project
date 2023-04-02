@@ -22,7 +22,7 @@ const getMovieById = async( req, res, next ) => {
 const getAllMovies = async( req, res, next ) => {
     
     try{
-        const allMovies = await Movie.find().sort('title')
+        const allMovies = await Movie.find().populate('genre').sort('title')
       //paginated results will be returned to the user
       const error = paginationError(allMovies, req)
       if (error) {
@@ -76,7 +76,7 @@ const deleteMovie = async( req, res, next ) => {
 
 const updateMovie = async( req, res, next ) => {
     try{
-        const movie = await Movie.findByIdAndUpdate(req.params.id,req.body)
+        const movie = await Movie.findByIdAndUpdate(req.params.id,req.body, { returnDocument :'after'})
         res.status(StatusCodes.OK).json({message: 'movie updated successfully', data:movie})        
     }
     catch(err){

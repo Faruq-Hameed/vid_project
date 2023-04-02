@@ -13,15 +13,16 @@ const rentalSchema = new Schema({
         required: [true, 'Movie id required']
     },
     dateOut: {
-        Type: Date,
-        // default: Date.now()
-    },
+        type: Date,
+        default: Date.now()
+      },
     dateReturned: {
-        Type: Date
+        type: Date
     },
     rentalFee: {
-        Type: Number
-    }
+        type: Number,
+        required: [true, 'rental fee is required']
+    } 
 })
 
 module.exports = model('Rental', rentalSchema)
