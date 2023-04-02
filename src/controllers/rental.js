@@ -31,7 +31,7 @@ const createRental = async (req, res) => {
     }
     // checking if the movie is available
     try{
-        const isMovieAvailable = await Movie.findById(req.params.movieId, 'numberInStock')
+        const isMovieAvailable = await Movie.findById(req.params.movieId)
         if(!isMovieAvailable || isMovieAvailable.numberInStock === 0) {
             return res
                 .status(StatusCodes.OK)
@@ -47,6 +47,7 @@ const createRental = async (req, res) => {
 
         //update and save the movie stock number
         isMovieAvailable.numberInStock -= 1
+        isMovieAvailable.dailyRentalRate +=1
         await isMovieAvailable.save()
 
         res.status(StatusCodes.CREATED).json({ message: 'new movie rental request successfully created', data: rental })
