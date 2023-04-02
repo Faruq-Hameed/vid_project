@@ -44,6 +44,13 @@ const createGenre = async (req, res) => {
         return;
     }
     try{
+        //check if the genre name is not already in the database
+        const genreAlreadyExist = await Genre.findOne({name: value.name})
+        if(genreAlreadyExist) {
+            return res
+            .status(StatusCodes.CONFLICT).json({message: 'genre already exists'})
+        }
+
         const genre = await Genre.create({...req.body})
         res.status(StatusCodes.OK).json({message: 'genre created successfully',data: genre})
     }
@@ -80,7 +87,3 @@ const updateGenre = async( req, res, next ) => {
 
 
 module.exports = {getGenreById, getAllGenres, createGenre,deleteGenre, updateGenre}
-// Create endpoint to Create a new Genre  POST /
-// Create endpoint to Update a Genre by id PUT /:id
-// Create endpoint to Delete a Genre by id DELETE /:id 
-// Create endpoint to Get a Genre by Id GET /:id 

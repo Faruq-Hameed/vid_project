@@ -18,7 +18,14 @@ const createCustomer = async (req, res) => {
         res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(validation.error.details[0].message);
         return;
     }
+    const phone = {phone: value.phone}
     try {
+    const phoneAlreadyExist = await Customer.findOne({phone: value.phone})
+    if(phoneAlreadyExist) {
+        return res
+        .status(StatusCodes.CONFLICT).json({message: 'phone number already exists'})
+    }
+     
         const user = await Customer.create({ ...value })
         createUserAuth({userId: user._id, name: user.name }, res) //generate user auth token and sent to cookie
         res.status(StatusCodes.OK).json({ message: 'customer created successfully', data: user })

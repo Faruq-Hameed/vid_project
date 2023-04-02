@@ -52,6 +52,13 @@ const createMovie = async (req, res) => {
     }
 
     try{
+         //check if the Movie name is not already in the database
+         const movieAlreadyExist = await Movie.findOne({title: value.title})
+         if(movieAlreadyExist) {
+             return res
+             .status(StatusCodes.CONFLICT).json({message: 'Movie already exists'})
+         }
+ 
         const newMovie = new Movie(value)
         newMovie.genre = req.params.genreId
         await newMovie.save()
