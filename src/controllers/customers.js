@@ -54,7 +54,6 @@ const getAllCustomers = async( req, res ) => {
     }
 }
 
-
 /*********PROTECTED ROUTES ********/
 
 // get a customer by Id

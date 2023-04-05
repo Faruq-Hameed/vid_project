@@ -22,6 +22,11 @@ app.use('/api/customers', customerRouter)
 app.use('/api/rentals', rentalRouter)
 
 
+
+app.use('/', (req, res) => {
+    res.status(200).send('Welcome to faruq vid app')
+})
+
 // handling all unknown url requests
 app.use('*', (req, res) => {
     res.status(404).send(`You typed an invalid url`)

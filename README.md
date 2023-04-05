@@ -1,11 +1,14 @@
 # VID APP
 
 ### About citrone
-  VID APP is a simple web application for movie rental services.
-  A movie belong to a genre and customers can make requests to borrow any available movie after signing up
+- VID APP is a simple web application for movie rental services.
+-A movie belong to a genre and customers can make requests to borrow any available movie after signing up.
+- Customer must register before making requests in any of the protected routes(create rental services and some customer requests endpoints)
 
-## Routings
-- Default routes : GET [/](/),[/api/citrone/](/api/citrone/),[/*](/*)
+
+## Api hosting Url
+- [https://faruq-vidproject.up.railway.app](https://faruq-vidproject.up.railway.app)
+
 
 #### Genre Routes
 

@@ -10,7 +10,8 @@ const router = express.Router()
 // get all Rentals sorted by name
 router.get('/',getAllRentals)
 
-// authentication and user verification middleware.
+/**authentication and user verification middleware. If authentication or verification failed
+then the creation of rental request wont be performed */
 router.use('/:userId', verifyToken)
 
 // endpoint for creating new Rentals

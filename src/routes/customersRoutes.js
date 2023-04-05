@@ -13,10 +13,11 @@ router.get('/',getAllCustomers)
 // endpoint for creating new Customers
 router.post('/',createCustomer)
 
-// a middleware that checks if a given Customer id exists for end points that has Customer id params
-router.use('/:id', verifyToken)
+/**authentication and user verification middleware. If authentication or verification failed
+then request to any of the endpoints below wont be accepted */
+router.use('/:userId', verifyToken)
 
-router.route('/:id')
+router.route('/:userId')
     .put(updateCustomer) // update a Customer
     .delete(deleteCustomer) // delete a Customer
     .get(getCustomerById)  // get a Customer
