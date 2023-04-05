@@ -39,7 +39,8 @@ const getAllGenres = async( req, res, next ) => {
 // create a new genre
 const createGenre = async (req, res) => {
     const validation = genreJoiSchema(req.body)
-    if (validation.error) {
+    const {error, value} = validation
+    if (error) {
         res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(validation.error.details[0].message);
         return;
     }
@@ -81,7 +82,7 @@ const updateGenre = async( req, res, next ) => {
     }
     catch(err){
 
-        res.status().json({message: err.message})
+        res.status(StatusCodes.BAD_REQUEST).json({message: err.message})
     }
 }
 

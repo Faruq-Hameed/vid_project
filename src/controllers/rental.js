@@ -7,7 +7,11 @@ const {paginate,paginationError} = require('../utils')
 //get all available Rentals
 const getAllRentals = async( req, res, next ) => {  
     try{
-        const allRentals = await Rental.find().sort('dateOut')
+        const allRentals = await Rental.find()
+        .sort('dateOut')
+        .populate('customer', 'name') //only the customer name and id are returned
+        .populate('movie', 'title') //only the movie title and id  are returned
+        .exec()
       //paginated results will be returned to the user
       const error = paginationError(allRentals, req)
       if (error) {

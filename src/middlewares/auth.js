@@ -15,7 +15,7 @@ const createUserAuth = async (payload, res) => {
 }
 
 const verifyToken = async (req, res, next) => {
-    const customer = await Customer.findById(req.params.id)
+    const customer = await Customer.findById(req.params.userId)
     if (!customer) {
         res.status(StatusCodes.NOT_FOUND).json({ message: 'customer not found' })
         return
@@ -45,4 +45,3 @@ const removeToken = async( res) => {
 }
 
 module.exports = {createUserAuth, verifyToken, removeToken}
-

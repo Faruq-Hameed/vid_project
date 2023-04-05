@@ -10,11 +10,11 @@ const router = express.Router()
 // get all Rentals sorted by name
 router.get('/',getAllRentals)
 
-// a middleware that checks if a given Customer id exists for end points that has Customer id params
-router.use('/:id', verifyToken)
+// authentication and user verification middleware.
+router.use('/:userId', verifyToken)
 
 // endpoint for creating new Rentals
-router.post('/:id/:movieId',createRental)
+router.post('/:userId/:movieId',createRental)
 
 
 
