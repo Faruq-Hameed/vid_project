@@ -18,8 +18,8 @@ app.use(morgan(":method :url :status :res[content-length] - :response-time ms - 
 
 app.use('/api/genres', genreRouter)
 app.use('/api/movies', moviesRouter)
-app.use('/api/customer', customerRouter)
-app.use('/api/rental', rentalRouter)
+app.use('/api/customers', customerRouter)
+app.use('/api/rentals', rentalRouter)
 
 
 // handling all unknown url requests

@@ -61,6 +61,7 @@ const createGenre = async (req, res) => {
 
 }
 
+//delete genre 
 const deleteGenre = async( req, res, next ) => {
     try{
        await Genre.findByIdAndDelete( req.params.id)

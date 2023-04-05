@@ -69,7 +69,7 @@ const createMovie = async (req, res) => {
     }
 }
 
-
+//delete 
 const deleteMovie = async( req, res, next ) => {
     try{
        await Movie.findByIdAndDelete( req.params.id)
