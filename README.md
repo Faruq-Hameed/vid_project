@@ -13,10 +13,10 @@
 #### Genre Routes
 
 - Default genre route (pagination available with query params) : GET : [/api/genre/](/api/genre/)
-- Get a specicific genre route : GET : [/api/genre/:id](/api/genre/:id)
-- Create a new genre : POST :  [/api/genre](/api/genre)
-- Delete a genre : DELETE : [/api/genre](/api/genre)
-- update genre : PUT : [/api/genre/:id](/api/genre/:id)
+- Get a specicific genre route : GET : [/api/genre/:id](/api/genres/:id)
+- Create a new genre : POST :  [/api/genre](/api/genres)
+- Delete a genre : DELETE : [/api/genre](/api/genres)
+- update genre : PUT : [/api/genre/:id](/api/genres/:id)
 
 
 #### Movies Routes
