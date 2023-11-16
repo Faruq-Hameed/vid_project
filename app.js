@@ -15,7 +15,6 @@ app.use(cookieParser());
 
 
 
-
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms - :remote-user :date"))
 
 app.use('/api/genres', genreRouter)
