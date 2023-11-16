@@ -6,7 +6,6 @@ const {genreRouter, moviesRouter, customerRouter, rentalRouter} = require('./src
 const startServer = require('./src/database/connection')
 const app = express();
 
-
 const port = process.env.PORT || 3000
 startServer()
 
